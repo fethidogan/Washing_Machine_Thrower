@@ -4,11 +4,11 @@ clock = pygame.time.Clock()
 screen = pygame.display.set_mode((800,600))
 
 #Background
-background = pygame.image.load("D:/Python öğreniyorum/Pygame/background.png")
+background = pygame.image.load("background.png")
 
 class Player:
     def __init__(self):
-        self.playerimg = pygame.image.load("D:/Python öğreniyorum/Pygame/idle.png")
+        self.playerimg = pygame.image.load("idle.png")
         self.playerimg = pygame.transform.scale(self.playerimg,(150,150))
         self.player_x = 50
         self.player_y = 400
@@ -55,7 +55,7 @@ class Alien:
 
     def generate_aliens(self):
         for i in range(self.num_of_aliens):
-            self.alienimg.append(pygame.image.load("D:/Python öğreniyorum/Pygame/alien.png"))
+            self.alienimg.append(pygame.image.load("alien.png"))
             self.alien_pos_x.append(random.randint(750, 900))
             self.alien_pos_y.append(self.alien_pos)
             self.alien_pos -= 90
@@ -90,7 +90,7 @@ class Alien:
             self.alien_pos_y = []
             self.alien_pos = 450
             for i in range(self.num_of_aliens):
-                self.alienimg.append(pygame.image.load("D:/Python öğreniyorum/Pygame/alien.png"))
+                self.alienimg.append(pygame.image.load("alien.png"))
                 self.alien_pos_x.append(random.randint(750, 900))
                 self.alien_pos_y.append(self.alien_pos)
                 self.alien_pos -= 90
@@ -106,7 +106,7 @@ player = Player()
 alien = Alien()
 class Machine:
     def __init__(self):
-        self.washing_machine = pygame.image.load("D:/Python öğreniyorum/Pygame/machine.png")
+        self.washing_machine = pygame.image.load("machine.png")
         self.washing_machine_x = player.player_x + 40
         self.washing_machine_y = player.player_y + 50
         self.throw = False
