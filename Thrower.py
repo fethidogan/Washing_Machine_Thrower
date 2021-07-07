@@ -6,6 +6,13 @@ import random
 # Initialize Font
 pygame.font.init()
 
+# Load Audio Files
+pygame.mixer.init(buffer=512)  # Initialize sound mixer, lower buffer to 512 for less delay when playing sound
+jump = pygame.mixer.Sound('jump.ogg')
+throw = pygame.mixer.Sound('throw.ogg')
+pygame.mixer.Sound.set_volume(jump, .2)  # Set Volume Lower
+pygame.mixer.Sound.set_volume(throw, .2)  # Set Volume Lower
+
 clock = pygame.time.Clock()
 
 # Screen
@@ -39,6 +46,7 @@ class Player:
         if not self.is_jump:
             if keys[pygame.K_SPACE]:
                 self.is_jump = True
+                jump.play()
         else:
             if self.jump_count >= -10:
                 # jump formula
@@ -132,6 +140,7 @@ class Machine:
         keys = pygame.key.get_pressed()
         if keys[pygame.K_UP]:
             self.throw = True
+            throw.play()
 
         # if machine is not thrown stick with the player
         if not self.throw:
