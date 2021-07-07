@@ -1,4 +1,7 @@
-import pygame, sys, math, random  # TODO: Each import needs its own line
+import pygame
+import sys
+import math
+import random
 
 # Initialize Font
 pygame.font.init()
@@ -73,9 +76,10 @@ class Alien:
 
         for i in range(alien.num_of_aliens):
             # 2D distance formula --> square root ( (x2-x1)**2 + (y2-y1)**2 )
-            # TODO: Shorten following two lines for PEP8 compliance
-            distance = math.sqrt((alien.alien_pos_x[i] - machine.washing_machine_x) ** 2 + (alien.alien_pos_y[i] - machine.washing_machine_y) ** 2)
-            player_distance = math.sqrt((alien.alien_pos_x[i] - player.player_x) ** 2 + (alien.alien_pos_y[i] - player.player_y) ** 2)
+            distance = math.sqrt((alien.alien_pos_x[i] - machine.washing_machine_x) ** 2 +
+                                 (alien.alien_pos_y[i] - machine.washing_machine_y) ** 2)
+            player_distance = math.sqrt((alien.alien_pos_x[i] - player.player_x) ** 2 +
+                                        (alien.alien_pos_y[i] - player.player_y) ** 2)
 
             # if player's position and washing machine position is lesser than 55
             if player_distance < 55:
@@ -85,7 +89,7 @@ class Alien:
             if machine.throw is True:
                 if distance < 40:
                     alien.alien_pos_y[i] = -500
-                    screen.blit(alien.alienimg[i],(alien.alien_pos_x[i],alien.alien_pos_y[i]))
+                    screen.blit(alien.alienimg[i], (alien.alien_pos_x[i], alien.alien_pos_y[i]))
                     self.score += 1
 
     # if score hits 3 regenerate aliens at random position between 750-900
