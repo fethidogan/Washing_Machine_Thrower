@@ -8,8 +8,11 @@ I hope you like it and find it usefull.
 gameplay video is below
 
 Left - Right --> Movements
+
 Space bar --> Jump
+
 Up arrow key -- > Throw Machine
+
 
 https://user-images.githubusercontent.com/80206446/124624571-a9758500-de85-11eb-9024-bf11a4b1d1db.mp4
 
