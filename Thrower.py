@@ -1,22 +1,43 @@
-import pygame, sys, math, random
-clock = pygame.time.Clock()
-#Screen
-screen = pygame.display.set_mode((800,600))
+import pygame
+import sys
+import math
+import random
 
-#Background
+# Initialize Font
+pygame.font.init()
+
+# Load Audio Files
+pygame.mixer.init(buffer=20)  # Initialize sound mixer, lower buffer to 512 for less delay when playing sound
+jump = pygame.mixer.Sound('jump.ogg')
+throw = pygame.mixer.Sound('throw.ogg')
+aliensound = pygame.mixer.Sound('alien.ogg')
+pygame.mixer.Sound.set_volume(jump, .2)  # Set Volume Lower
+pygame.mixer.Sound.set_volume(throw, .2)  # Set Volume Lower
+pygame.mixer.Sound.set_volume(aliensound, .4)  # Set Volume Lower
+pygame.mixer.music.load('themesong.mp3')  # Load in theme song
+pygame.mixer.music.play(-1)
+pygame.mixer.music.set_volume(.2)
+
+clock = pygame.time.Clock()
+
+# Screen
+screen = pygame.display.set_mode((800, 600))
+
+# Background
 background = pygame.image.load("background.png")
+
 
 class Player:
     def __init__(self):
         self.playerimg = pygame.image.load("idle.png")
-        self.playerimg = pygame.transform.scale(self.playerimg,(150,150))
+        self.playerimg = pygame.transform.scale(self.playerimg, (150, 150))
         self.player_x = 50
         self.player_y = 400
         self.player_velocity = 3
         self.is_jump = False
         self.jump_count = 10
 
-    # Move player and limit boundry
+    # Move player and limit boundary
     def move_player_in_screen(self):
         keys = pygame.key.get_pressed()
         if keys[pygame.K_RIGHT] and self.player_x < 720:
@@ -30,6 +51,7 @@ class Player:
         if not self.is_jump:
             if keys[pygame.K_SPACE]:
                 self.is_jump = True
+                jump.play()
         else:
             if self.jump_count >= -10:
                 # jump formula
@@ -41,6 +63,7 @@ class Player:
             else:
                 self.is_jump = False
                 self.jump_count = 10
+
 
 class Alien:
     def __init__(self):
@@ -66,8 +89,10 @@ class Alien:
 
         for i in range(alien.num_of_aliens):
             # 2D distance formula --> square root ( (x2-x1)**2 + (y2-y1)**2 )
-            distance = math.sqrt((alien.alien_pos_x[i] - machine.washing_machine_x) ** 2 + (alien.alien_pos_y[i] - machine.washing_machine_y) ** 2)
-            player_distance = math.sqrt((alien.alien_pos_x[i] - player.player_x) ** 2 + (alien.alien_pos_y[i] - player.player_y) ** 2)
+            distance = math.sqrt((alien.alien_pos_x[i] - machine.washing_machine_x) ** 2 +
+                                 (alien.alien_pos_y[i] - machine.washing_machine_y) ** 2)
+            player_distance = math.sqrt((alien.alien_pos_x[i] - player.player_x) ** 2 +
+                                        (alien.alien_pos_y[i] - player.player_y) ** 2)
 
             # if player's position and washing machine position is lesser than 55
             if player_distance < 55:
@@ -77,8 +102,9 @@ class Alien:
             if machine.throw is True:
                 if distance < 40:
                     alien.alien_pos_y[i] = -500
-                    screen.blit(alien.alienimg[i],(alien.alien_pos_x[i],alien.alien_pos_y[i]))
+                    screen.blit(alien.alienimg[i], (alien.alien_pos_x[i], alien.alien_pos_y[i]))
                     self.score += 1
+                    aliensound.play()
 
     # if score hits 3 regenerate aliens at random position between 750-900
     def regenerate_aliens(self):
@@ -101,9 +127,13 @@ class Alien:
             if self.alien_pos_x[i] < 20:
                 pygame.quit()
                 sys.exit()
+
+
 # Objects
 player = Player()
 alien = Alien()
+
+
 class Machine:
     def __init__(self):
         self.washing_machine = pygame.image.load("machine.png")
@@ -116,6 +146,7 @@ class Machine:
         keys = pygame.key.get_pressed()
         if keys[pygame.K_UP]:
             self.throw = True
+            throw.play()
 
         # if machine is not thrown stick with the player
         if not self.throw:
@@ -130,7 +161,28 @@ class Machine:
                 self.washing_machine_y = player.player_y + 50
                 self.throw = False
 
+
+# Start Menu Loop
+def start_menu():
+    running = True
+    title_font = pygame.font.SysFont('comicsans', 75)  # Create font object
+    while running:
+        screen.blit(background, (0, 0))  # Draw Background To Screen
+        menu_label = title_font.render('Press Space To Begin...', True, (255, 255, 255))  # Create Text Label
+        screen.blit(menu_label, (130, 50))  # Draw Label To Screen
+        pygame.display.update()
+        for event in pygame.event.get():
+            if event.type == pygame.QUIT:
+                return False
+            elif event.type == pygame.KEYDOWN:
+                if event.key == pygame.K_SPACE:  # If space is pressed, start game
+                    main_loop()  # Starts main_loop
+                    running = False  # After main_loop (player loses), the game quits
+
+
 machine = Machine()
+
+
 def main_loop():
     # Main game loop
     while not alien.gameover:
@@ -159,4 +211,5 @@ def main_loop():
         # refresh window
         pygame.display.update()
 
-main_loop()
+
+start_menu()  # Game starts from start menu, and the main_loop runs from within the start menu
