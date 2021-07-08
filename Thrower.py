@@ -14,6 +14,9 @@ aliensound = pygame.mixer.Sound('alien.ogg')
 pygame.mixer.Sound.set_volume(jump, .2)  # Set Volume Lower
 pygame.mixer.Sound.set_volume(throw, .2)  # Set Volume Lower
 pygame.mixer.Sound.set_volume(aliensound, .4)  # Set Volume Lower
+pygame.mixer.music.load('themesong.mp3')  # Load in theme song
+pygame.mixer.music.play(-1)
+pygame.mixer.music.set_volume(.2)
 
 clock = pygame.time.Clock()
 
