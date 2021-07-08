@@ -37,6 +37,7 @@ class Player:
         self.player_velocity = 3
         self.is_jump = False
         self.jump_count = 10
+        self.score = 0  # Added score tracker to player object
 
     # Move player and limit boundary
     def move_player_in_screen(self):
@@ -77,7 +78,7 @@ class Alien:
         self.score = 0
         self.gameover = False
 
-    def generate_aliens(self):
+    def generate_aliens(self, player):  # Pass in player so when alien hit, player score increases by 1
         for i in range(self.num_of_aliens):
             self.alienimg.append(pygame.image.load("alien.png"))
             self.alien_pos_x.append(random.randint(750, 900))
@@ -105,6 +106,7 @@ class Alien:
                     alien.alien_pos_y[i] = -500
                     screen.blit(alien.alienimg[i], (alien.alien_pos_x[i], alien.alien_pos_y[i]))
                     self.score += 1
+                    player.score += 1  # Increase player score by 1
                     aliensound.play()
 
     # if score hits 3 regenerate aliens at random position between 750-900
@@ -190,6 +192,10 @@ def main_loop():
         # Fps
         clock.tick(80)
 
+        # Creating score tracker
+        score_font = pygame.font.SysFont('comicsans', 75)
+        score_tracker = score_font.render(f'Score: {player.score}', True, (255, 255, 255))
+
         # Handling Quit
         for event in pygame.event.get():
             if event.type == pygame.QUIT:
@@ -200,11 +206,12 @@ def main_loop():
         screen.blit(background, (0, 0))
         screen.blit(machine.washing_machine, (machine.washing_machine_x, machine.washing_machine_y))
         screen.blit(player.playerimg, (player.player_x, player.player_y))
+        screen.blit(score_tracker, (15, 20))  # Draw score tracker to screen
 
         # Class functions
         player.move_player_in_screen()
         player.player_jump()
-        alien.generate_aliens()
+        alien.generate_aliens(player)
         machine.throw_machine()
         alien.regenerate_aliens()
         alien.alien_wins()
