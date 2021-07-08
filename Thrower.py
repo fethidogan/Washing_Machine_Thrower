@@ -7,7 +7,8 @@ import random
 pygame.font.init()
 
 # Load Audio Files
-pygame.mixer.init(buffer=20)  # Initialize sound mixer, lower buffer to 512 for less delay when playing sound
+pygame.mixer.init(size=-16, channels=2)  # Initialize Sound Mixer
+pygame.mixer.set_num_channels(16)  # Set channels to 16 from 8 to avoid sounds not playing
 jump = pygame.mixer.Sound('jump.ogg')
 throw = pygame.mixer.Sound('throw.ogg')
 aliensound = pygame.mixer.Sound('alien.ogg')
@@ -104,6 +105,7 @@ class Alien:
                     alien.alien_pos_y[i] = -500
                     screen.blit(alien.alienimg[i], (alien.alien_pos_x[i], alien.alien_pos_y[i]))
                     self.score += 1
+                    print('Alien Dead')
                     aliensound.play()
 
     # if score hits 3 regenerate aliens at random position between 750-900
