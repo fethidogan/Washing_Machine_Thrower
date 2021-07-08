@@ -7,7 +7,7 @@ import random
 pygame.font.init()
 
 # Load Audio Files
-pygame.mixer.init(buffer=2002)  # Initialize sound mixer, lower buffer to 512 for less delay when playing sound
+pygame.mixer.init(buffer=20)  # Initialize sound mixer, lower buffer to 512 for less delay when playing sound
 jump = pygame.mixer.Sound('jump.ogg')
 throw = pygame.mixer.Sound('throw.ogg')
 aliensound = pygame.mixer.Sound('alien.ogg')
