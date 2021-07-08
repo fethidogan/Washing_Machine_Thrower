@@ -105,7 +105,6 @@ class Alien:
                     alien.alien_pos_y[i] = -500
                     screen.blit(alien.alienimg[i], (alien.alien_pos_x[i], alien.alien_pos_y[i]))
                     self.score += 1
-                    print('Alien Dead')
                     aliensound.play()
 
     # if score hits 3 regenerate aliens at random position between 750-900
