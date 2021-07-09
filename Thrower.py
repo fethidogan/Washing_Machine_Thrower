@@ -16,8 +16,6 @@ pygame.mixer.Sound.set_volume(jump, .2)  # Set Volume Lower
 pygame.mixer.Sound.set_volume(throw, .2)  # Set Volume Lower
 pygame.mixer.Sound.set_volume(aliensound, .4)  # Set Volume Lower
 pygame.mixer.music.load('themesong.mp3')  # Load in theme song
-pygame.mixer.music.play(-1)
-pygame.mixer.music.set_volume(.2)
 
 clock = pygame.time.Clock()
 
@@ -25,12 +23,12 @@ clock = pygame.time.Clock()
 screen = pygame.display.set_mode((800, 600))
 
 # Background
-background = pygame.image.load("background.png")
+background = pygame.image.load("background.png").convert_alpha()
 
 
 class Player:
     def __init__(self):
-        self.playerimg = pygame.image.load("idle.png")
+        self.playerimg = pygame.image.load("idle.png").convert_alpha()
         self.playerimg = pygame.transform.scale(self.playerimg, (150, 150))
         self.player_x = 50
         self.player_y = 400
@@ -80,7 +78,7 @@ class Alien:
 
     def generate_aliens(self, player):  # Pass in player so when alien hit, player score increases by 1
         for i in range(self.num_of_aliens):
-            self.alienimg.append(pygame.image.load("alien.png"))
+            self.alienimg.append(pygame.image.load("alien.png").convert_alpha())
             self.alien_pos_x.append(random.randint(750, 900))
             self.alien_pos_y.append(self.alien_pos)
             self.alien_pos -= 90
@@ -119,7 +117,7 @@ class Alien:
             self.alien_pos_y = []
             self.alien_pos = 450
             for i in range(self.num_of_aliens):
-                self.alienimg.append(pygame.image.load("alien.png"))
+                self.alienimg.append(pygame.image.load("alien.png").convert_alpha())
                 self.alien_pos_x.append(random.randint(750, 900))
                 self.alien_pos_y.append(self.alien_pos)
                 self.alien_pos -= 90
@@ -139,7 +137,7 @@ alien = Alien()
 
 class Machine:
     def __init__(self):
-        self.washing_machine = pygame.image.load("machine.png")
+        self.washing_machine = pygame.image.load("machine.png").convert_alpha()
         self.washing_machine_x = player.player_x + 40
         self.washing_machine_y = player.player_y + 50
         self.throw = False
@@ -165,8 +163,45 @@ class Machine:
                 self.throw = False
 
 
+# Death Screen
+def death_screen(player):  # Pass in player object for access to final score
+
+    # Death screen music start
+    pygame.mixer.music.load('death_theme.mp3')  # Load in death screen song
+    pygame.mixer.music.play(-1)  # Start playing theme song
+    pygame.mixer.music.set_volume(.2)
+
+    # Fonts initialized
+    death_font = pygame.font.SysFont('comicsans', 200)
+    death_option_font = pygame.font.SysFont('comicsans', 65)
+    death_label = death_font.render('You Died...', True, (255, 0, 0))
+    death_option = death_option_font.render('Press Space To Quit', True, (0, 0, 0))
+    score_label = death_option_font.render(f'Final Score: {player.score}', True, (0, 0, 0))
+
+    # Death Screen Loop
+    running = True
+    while running:
+        clock.tick(80)
+        for event in pygame.event.get():
+            if event.type == pygame.QUIT:
+                pygame.quit()
+                sys.exit()
+            if event.type == pygame.KEYDOWN:
+                if event.key == pygame.K_SPACE:
+                    running = False
+
+        # Draw all text and background to screen
+        screen.blit(background, (0, 0))
+        screen.blit(death_label, (65, 200))
+        screen.blit(death_option, (175, 350))
+        screen.blit(score_label, (225, 75))
+        pygame.display.update()
+
+
 # Start Menu Loop
 def start_menu():
+    pygame.mixer.music.play(-1)  # Start playing theme song
+    pygame.mixer.music.set_volume(.2)
     running = True
     title_font = pygame.font.SysFont('comicsans', 75)  # Create font object
     while running:
@@ -180,6 +215,8 @@ def start_menu():
             elif event.type == pygame.KEYDOWN:
                 if event.key == pygame.K_SPACE:  # If space is pressed, start game
                     main_loop()  # Starts main_loop
+                    pygame.mixer.music.stop()
+                    death_screen(player)
                     running = False  # After main_loop (player loses), the game quits
 
 
